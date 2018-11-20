@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1016</width>
+    <height>760</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>海韵队计时器</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="2,1">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0">
+          <item>
+           <widget class="QLCDNumber" name="time_lcd">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>500</width>
+              <height>250</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QPushButton" name="time_3">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>微软雅黑</family>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>3分钟</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="time_7">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>微软雅黑</family>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>7分钟</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="time_10">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>微软雅黑</family>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>10分钟</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="time_start">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>微软雅黑</family>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>开始</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="time_end">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>微软雅黑</family>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>结束</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QTableView" name="tableView">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>500</width>
+            <height>125</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>微软雅黑</family>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
