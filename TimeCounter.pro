@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2017-12-25T17:13:00
+# Project created by QtCreator 2016-09-12T20:13:18
 #
 #-------------------------------------------------
 
@@ -18,10 +18,3 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
-
-CONFIG+=precompile_header
-PRECOMPILED_HEADER = mainwindow.h
-
-RESOURCES +=
-
-RC_FILE=logo.rc

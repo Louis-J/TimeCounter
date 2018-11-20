@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
-#include "windows.h"//Beep
+#include "windows.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,144 +8,200 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     //新建一个QTimer对象
     timer = new QTimer();
     timer->setInterval(1000);
-    signalMapper = new QSignalMapper(this);
 
-    connect(timer, SIGNAL(timeout()), this, SLOT(time_onTimerOut()));
-
-    signalMapper->setMapping(ui->time_3, 3);
-    signalMapper->setMapping(ui->time_7, 7);
-    signalMapper->setMapping(ui->time_10, 10);
-    connect(ui->time_3, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->time_7, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(ui->time_10, SIGNAL(clicked()), signalMapper, SLOT(map()));
-    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(time_set(int)));
-    connect(ui->time_start, SIGNAL(clicked()), this, SLOT(time_startorpause()));
-    connect(ui->time_end, SIGNAL(clicked()), this, SLOT(time_end()));
+    time = NULL;
 
 
-    ui->time_lcd->display("00:00");
-    ui->time_lcd->setStyleSheet("QLCDNumber{color:black}");
+    connect(timer, SIGNAL(timeout()), this, SLOT(onTimerOut()));
+    connect(ui->three, SIGNAL(clicked()), this, SLOT(set3()));
+    connect(ui->five, SIGNAL(clicked()), this, SLOT(set5()));
+    connect(ui->start, SIGNAL(clicked()), this, SLOT(startorpause()));
+    connect(ui->end, SIGNAL(clicked()), this, SLOT(end()));
+    connect(ui->R1, SIGNAL(clicked()), this, SLOT(R1()));
+    connect(ui->R2, SIGNAL(clicked()), this, SLOT(R2()));
+    connect(ui->R3, SIGNAL(clicked()), this, SLOT(R3()));
+    connect(ui->R4, SIGNAL(clicked()), this, SLOT(R4()));
+    connect(ui->R5, SIGNAL(clicked()), this, SLOT(R5()));
+    connect(ui->B1, SIGNAL(clicked()), this, SLOT(B1()));
+    connect(ui->B2, SIGNAL(clicked()), this, SLOT(B2()));
+    connect(ui->B3, SIGNAL(clicked()), this, SLOT(B3()));
+    connect(ui->B4, SIGNAL(clicked()), this, SLOT(B4()));
+    connect(ui->B5, SIGNAL(clicked()), this, SLOT(B5()));
+    connect(ui->BlueClear, SIGNAL(clicked()), this, SLOT(BlueClear()));
+    connect(ui->RedClear, SIGNAL(clicked()), this, SLOT(RedClear()));
+    connect(ui->BlueSet, SIGNAL(clicked()), this, SLOT(BlueSet()));
+    connect(ui->RedSet, SIGNAL(clicked()), this, SLOT(RedSet()));
 
-    //一、添加表头：
-    QStandardItemModel  *model = new QStandardItemModel();
-    model->setColumnCount(4);
-    for(int i = 0; i < 4; i++)
-        model->setHeaderData(i,Qt::Horizontal,header[i]);
-    //二、设置表格属性：
-    ui->tableView->setModel(model);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//均分列
-    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);//均分行
-    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);//设置整行选中
-    //三、添加行
-    for(int i = 0; i < 4; i++)
-    {
-        model->setItem(i,0,new QStandardItem(name[i]));
-        model->item(i,0)->setForeground(QBrush(QColor(255, 0, 0)));//设置字符颜色
-        model->item(i,0)->setTextAlignment(Qt::AlignCenter);//设置字符位置
-        model->item(i,0)->setEditable(true);
-        for(int j = 1; j < 4; j++){
-            model->setItem(i,j,new QStandardItem(QString("0")));
-            model->item(i,j)->setTextAlignment(Qt::AlignCenter);
-            //model->item(i,j)->setAccessibleDescription();
-            model->item(i,j)->setAccessibleText("0123456789");
+    ui->lcdNumber->display("00:00");
+    ui->RedScore->setStyleSheet("QLCDNumber{color:red}");
+    ui->BlueScore->setStyleSheet("QLCDNumber{color:blue}");
+
+}
+void MainWindow::onTimerOut()
+{
+    timegone++;
+    if(timegone>=timedist){
+        Beep(800, 900);
+        if(timedist==300)
+            timer->stop();
+        else{
+            this->set5();
+            this->startorpause();
         }
     }
+    else if(timedist-timegone<10){
+        Beep(523, 500);
+    }
+    //设置晶体管控件QLCDNumber上显示的内容
+      QTime now=time->addSecs(-timegone);
+      ui->lcdNumber->display(now.toString("mm:ss"));
+}
+void MainWindow::set3()
+{
+    time = new QTime(0,3);
+    timer->stop();
+    timedist=180;
+    timegone=0;
+    ui->lcdNumber->setStyleSheet("QLCDNumber{color:black}");
+    ui->lcdNumber->display(time->toString("mm:ss"));
+    ui->start->setText("开始");
+}
+void MainWindow::set5()
+{
+    time = new QTime(0,5);
+    timer->stop();
+    timedist=300;
+    timegone=0;
+    ui->lcdNumber->setStyleSheet("QLCDNumber{color:red}");
+    ui->lcdNumber->display(time->toString("mm:ss"));
+    ui->start->setText("开始");
+}
+void MainWindow::startorpause()
+{
+    if(timedist==0){
+        ui->start->setText("傻逼");
+        ui->three->setText("傻逼");
+        ui->five->setText("傻逼");
+        ui->end->setText("傻逼");
+        this->setWindowTitle("傻逼");
+        QMessageBox::information(this,"错误！","你还没设时间！");
+        ui->start->setText("开始");
+        ui->three->setText("3分钟");
+        ui->five->setText("5分钟");
+        ui->end->setText("结束");
+        this->setWindowTitle("RCS计时器");
+    }
+    else if(timer->isActive()){
+        timer->stop();
+        ui->start->setText("暂停");
+    }
+    else{
+        timer->start();
+        ui->start->setText("开始");
+    }
+}
+void MainWindow::end()
+{
+    if(timedist==0){
+        ui->start->setText("傻逼");
+        ui->three->setText("傻逼");
+        ui->five->setText("傻逼");
+        ui->end->setText("傻逼");
+        this->setWindowTitle("傻逼");
+        QMessageBox::information(this,"错误！","你还没设时间！");
+        ui->start->setText("开始");
+        ui->three->setText("3分钟");
+        ui->five->setText("5分钟");
+        ui->end->setText("结束");
+        this->setWindowTitle("RCS计时器");
+    }
+    else{
+        timegone=0;
+        timer->stop();
+        ui->lcdNumber->display(time->toString("mm:ss"));
+        ui->start->setText("开始");
+    }
+}
+
+void MainWindow::R1()
+{
+    RScore+=5;
+    ui->RedScore->display(RScore);
+}
+void MainWindow::R2()
+{
+    RScore+=10;
+    ui->RedScore->display(RScore);
+}
+void MainWindow::R3()
+{
+    RScore+=20;
+    ui->RedScore->display(RScore);
+}
+void MainWindow::R4()
+{
+    RScore+=30;
+    ui->RedScore->display(RScore);
+}
+void MainWindow::R5()
+{
+    RScore+=50;
+    ui->RedScore->display(RScore);
+}
+
+
+
+void MainWindow::B1()
+{
+    BScore+=5;
+    ui->BlueScore->display(BScore);
+}
+void MainWindow::B2()
+{
+    BScore+=10;
+    ui->BlueScore->display(BScore);
+}
+void MainWindow::B3()
+{
+    BScore+=20;
+    ui->BlueScore->display(BScore);
+}
+void MainWindow::B4()
+{
+    BScore+=30;
+    ui->BlueScore->display(BScore);
+}
+void MainWindow::B5()
+{
+    BScore+=50;
+    ui->BlueScore->display(BScore);
+}
+void MainWindow::RedClear()
+{
+    RScore=0;
+    ui->RedScore->display(RScore);
+}
+void MainWindow::BlueClear()
+{
+    BScore=0;
+    ui->BlueScore->display(BScore);
+}
+void MainWindow::RedSet()
+{
+    RScore=QInputDialog().getInt(NULL,"请输入分数","请输入分数");
+    ui->RedScore->display(RScore);
+}
+void MainWindow::BlueSet()
+{
+    BScore=QInputDialog().getInt(NULL,"请输入分数","请输入分数");
+    ui->BlueScore->display(BScore);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-void MainWindow::time_onTimerOut()
-{
-    timeleft--;
-    if(timeleft==0){
-        std::thread(Beep,800,900).detach();
-        ui->time_lcd->setStyleSheet("QLCDNumber{color:black}");
-        if(timedist==3*60){
-            this->time_set(7);
-            this->time_startorpause();
-        }
-        else if(timedist==7*60){
-            this->time_set(10);
-            this->time_startorpause();
-        }
-        else{
-            timer->stop();
-            ui->time_start->setText("开始");
-        }
-    }
-    else if(timeleft<=10){
-        std::thread(Beep,523,500).detach();
-        ui->time_lcd->setStyleSheet("QLCDNumber{color:red}");
-    }
-    //设置晶体管控件QLCDNumber上显示的内容
-    QTime now(0,0,timeleft);
-    ui->time_lcd->display(QTime(0,timeleft/60,timeleft%60).toString("mm:ss"));
-}
-void MainWindow::time_set(int settime)
-{
-    timer->stop();
-    timedist=settime*2;
-    timeleft=settime*2;
-    ui->time_lcd->setStyleSheet("QLCDNumber{color:black}");
-    ui->time_lcd->display(QTime(0,timeleft/60,timeleft%60).toString("mm:ss"));
-    ui->time_start->setText("开始");
-}
-void MainWindow::time_startorpause()
-{
-    if(timeleft==0){
-//        ui->time_3->setText("傻逼");
-//        ui->time_7->setText("傻逼");
-//        ui->time_10->setText("傻逼");
-//        ui->time_start->setText("傻逼");
-//        ui->time_end->setText("傻逼");
-//        this->setWindowTitle("傻逼");
-        QMessageBox::information(this,"错误！","你还没设时间！");
-//        ui->time_start->setText("开始");
-//        ui->time_3->setText("3分钟");
-//        ui->time_7->setText("7分钟");
-//        ui->time_10->setText("10分钟");
-//        ui->time_end->setText("结束");
-//        this->setWindowTitle("计时器");
-    }
-    else if(timer->isActive()){
-        timer->stop();
-        ui->time_start->setText("开始");
-    }
-    else{
-        timer->start();
-        ui->time_start->setText("暂停");
-    }
-}
-void MainWindow::time_end()
-{
-    if(timeleft==0){
-//        ui->time_3->setText("傻逼");
-//        ui->time_7->setText("傻逼");
-//        ui->time_10->setText("傻逼");
-//        ui->time_start->setText("傻逼");
-//        ui->time_end->setText("傻逼");
-//        this->setWindowTitle("傻逼");
-        QMessageBox::information(this,"错误！","你还没开始！");
-//        ui->time_start->setText("开始");
-//        ui->time_3->setText("3分钟");
-//        ui->time_7->setText("7分钟");
-//        ui->time_10->setText("10分钟");
-//        ui->time_end->setText("结束");
-//        this->setWindowTitle("计时器");
-    }
-    else{
-        timeleft=0;
-        timer->stop();
-        ui->time_lcd->display(QTime(0,timeleft/60,timeleft%60).toString("mm:ss"));
-        ui->time_lcd->setStyleSheet("QLCDNumber{color:black}");
-        ui->time_start->setText("开始");
-    }
-}
-
-

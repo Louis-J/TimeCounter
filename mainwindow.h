@@ -2,18 +2,17 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDialog>
 
-#include <thread>
-#include <QThread>
 #include <QtWidgets/QLCDNumber>
 #include <QtWidgets/QVBoxLayout>
 #include <QTimer>
 #include <QTime>
-#include <QLabel>
-#include <QStandardItemModel>
-#include <QSignalMapper>
 #include <QMessageBox>
 #include <QInputDialog>
+
+class QLCDNumber;
+class QTimer;
 
 namespace Ui {
 class MainWindow;
@@ -29,23 +28,34 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
-    QSignalMapper *signalMapper;
-    QString name[4]={"RNG-xm","NMD-2","赛博人队","FB2"};
-    QString header[4]={"队名","小积分","大积分","比赛场次"};
-
-
+    int timegone=0;
+    int timedist=0;
+    int RScore=0;
+    int BScore=0;
 signals:
 public slots:
-    void time_onTimerOut();
-    void time_set(int settime);
-    void time_startorpause();
-    void time_end();
+    void onTimerOut();
+    void set3();
+    void set5();
+    void startorpause();
+    void end();
+    void R1();
+    void R2();
+    void R3();
+    void R4();
+    void R5();
+    void B1();
+    void B2();
+    void B3();
+    void B4();
+    void B5();
+    void RedClear();
+    void BlueClear();
+    void RedSet();
+    void BlueSet();
 private:
-    int timedist=0;
-    int timeleft=0;
-    std::thread *beep1;
-    std::thread *beep2;
+  QTimer *timer;
+  QTime *time;
 };
 
 #endif // MAINWINDOW_H
